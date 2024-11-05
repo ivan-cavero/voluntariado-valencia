@@ -71,10 +71,10 @@ async function main() {
 		execSync(`git checkout -b ${releaseBranch}`)
 		execSync('git add .')
 		execSync(`git commit -m "chore: prepare release ${newVersion}"`)
-		execSync(`git push origin ${releaseBranch}`)
+		execSync(`git push -u origin ${releaseBranch}`) // Set the upstream branch
 
 		// Run release-it
-		const command = `release-it ${releaseType} ${additionalArgs.join(' ')} --no-git.requireCleanWorkingDir`
+		const command = `release-it ${releaseType} ${additionalArgs.join(' ')} --no-git.requireCleanWorkingDir --no-git.requireUpstream`
 		console.log('Executing command:', command)
 		execSync(command, { stdio: 'inherit' })
 
