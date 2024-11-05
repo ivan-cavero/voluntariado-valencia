@@ -1,0 +1,28 @@
+{
+	"git": {
+		"commitMessage": "chore: release v${version}",
+		"tagName": "v${version}",
+		"requireCleanWorkingDir": true,
+		"requireBranch": ["main", "hotfix/*"],
+		"requireUpstream": true,
+		"push": true
+	},
+	"github": {
+		"release": true,
+		"releaseName": "Release ${version}",
+		"tokenRef": "GITHUB_TOKEN"
+	},
+	"npm": {
+		"publish": false
+	},
+	"plugins": {
+		"@release-it/conventional-changelog": {
+			"preset": "angular",
+			"infile": "CHANGELOG.md"
+		}
+	},
+	"hooks": {
+		"before:init": ["bun run build"],
+		"after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+	}
+}
