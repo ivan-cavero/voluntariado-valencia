@@ -9,7 +9,10 @@
 		"cypress": "cypress open",
 		"cypress:run": "cypress run --browser chrome",
 		"release": "release-it",
-		"prepare": "husky"
+		"prepare": "husky",
+		"release:minor": "bun scripts/release.js minor",
+		"release:major": "bun scripts/release.js major",
+		"hotfix": "bun scripts/release.js patch --preRelease=hotfix"
 	},
 	"dependencies": {
 		"@formatjs/intl-localematcher": "^0.5.7",

@@ -23,17 +23,7 @@
 		}
 	},
 	"hooks": {
-		"before:init": [
-			"echo \"Token check (first 4 chars): ${RELEASE_IT_TOKEN:0:4}\"",
-			"bun run build"
-		],
-		"after:git:release": [
-			"git checkout main",
-			"git pull origin main",
-			"git merge develop",
-			"git push origin main",
-			"git checkout develop"
-		],
+		"before:init": ["bun run build"],
 		"after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
 	}
 }
