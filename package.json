@@ -10,12 +10,14 @@
 		"cypress:run": "cypress run --browser chrome",
 		"release": "release-it",
 		"prepare": "husky",
-		"release:minor": "bun scripts/release.js minor",
-		"release:major": "bun scripts/release.js major",
-		"hotfix": "bun scripts/release.js patch --preRelease=hotfix"
+		"release:minor": "node scripts/release.js minor",
+		"release:major": "node scripts/release.js major",
+		"release:patch": "node scripts/release.js patch",
+		"hotfix": "node scripts/release.js hotfix"
 	},
 	"dependencies": {
 		"@formatjs/intl-localematcher": "^0.5.7",
+		"@octokit/rest": "^21.0.2",
 		"@radix-ui/react-avatar": "1.1.1",
 		"@radix-ui/react-collapsible": "1.1.1",
 		"@radix-ui/react-dialog": "1.1.2",
