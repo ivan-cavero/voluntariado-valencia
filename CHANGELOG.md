@@ -1,5 +1,17 @@
 
 
+# [0.5.0](https://github.com/ivan-cavero/voluntariado-valencia/compare/v0.4.0...v0.5.0) (2024-11-05)
+
+
+### Bug Fixes
+
+* change release script to es6 ([9323244](https://github.com/ivan-cavero/voluntariado-valencia/commit/93232444b331e4ec58fb0e26fd9a25c9dfde6d9f))
+
+
+### Features
+
+* automatically open a pull request after a release or hotfix ([9866625](https://github.com/ivan-cavero/voluntariado-valencia/commit/9866625647cd6a147b76900c1ad51765dd458a3c))
+
 # [0.4.0](https://github.com/ivan-cavero/voluntariado-valencia/compare/v0.3.0...v0.4.0) (2024-11-05)
 
 
