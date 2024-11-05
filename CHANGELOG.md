@@ -1,5 +1,17 @@
 
 
+# [0.4.0](https://github.com/ivan-cavero/voluntariado-valencia/compare/v0.3.0...v0.4.0) (2024-11-05)
+
+
+### Bug Fixes
+
+* releaseit ([e7520d3](https://github.com/ivan-cavero/voluntariado-valencia/commit/e7520d3e011cc04fc917609699731c24c80ed192))
+
+
+### Features
+
+* add release/hotfix script ([0f106ab](https://github.com/ivan-cavero/voluntariado-valencia/commit/0f106abdbb417e0eca1101a985a1346279e75ba0))
+
 # [0.3.0](https://github.com/ivan-cavero/voluntariado-valencia/compare/v0.2.1...v0.3.0) (2024-11-05)
 
 
