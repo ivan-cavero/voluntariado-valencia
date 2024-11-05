@@ -59,15 +59,3 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
-
-  wait-for-vercel:
-    name: Wait for Vercel Deployment
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for Vercel Preview
-        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
-        id: waitForVercel
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 300
