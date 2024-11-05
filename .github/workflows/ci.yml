@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,13 +34,17 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          build: bun run build
-          start: bun run start
-          wait-on: 'http://localhost:3000'
-          command: bun run cypress:run
+      - name: Start server
+        run: bun run start & # Run in background
+        
+      - name: Wait for server
+        run: |
+          while ! nc -z localhost 3000; do
+            sleep 1
+          done
+
+      - name: Run Cypress tests
+        run: bun run cypress:run
 
       - name: Upload Cypress screenshots
         uses: actions/upload-artifact@v3
@@ -54,3 +59,15 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+  wait-for-vercel:
+    name: Wait for Vercel Deployment
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForVercel
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300

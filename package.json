@@ -7,8 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"cypress": "cypress open",
-		"cypress:run": "cypress run --browser chrome",
-		"test": "bun run cypress:run"
+		"cypress:run": "cypress run --browser chrome"
 	},
 	"dependencies": {
 		"@formatjs/intl-localematcher": "^0.5.7",
