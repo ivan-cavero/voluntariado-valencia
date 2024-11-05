@@ -1,4 +1,4 @@
-[English](README.md)
+[English](README.md) | [Español](README.es.md)
 
 # Voluntariado Valencia
 
@@ -21,7 +21,7 @@ To set up the project for development:
 2. Install Bun if you haven't already (visit bun.sh for installation instructions).
 3. Navigate to the project directory in your terminal.
 4. Run "bun install" to install all dependencies.
-5. Set up Husky by running "bun husky install".
+5. Run "bun run prepare" to set up Husky and the commit message linter.
 6. Create a .env file in the root directory and add necessary environment variables (refer to .env.example).
 7. Run "bun run dev" to start the development server.
 
@@ -37,7 +37,7 @@ To create a new feature:
 
 1. Ensure you're on the develop branch and it's up to date by running "git checkout develop" and "git pull origin develop".
 2. Create a new feature branch with "git checkout -b feature/name-of-feature".
-3. Develop your feature, making commits that follow the conventional commit format.
+3. Develop your feature, making commits that follow the conventional commit format (see Commit Conventions below).
 4. Push your branch to GitHub with "git push origin feature/name-of-feature".
 5. Create a Pull Request on GitHub from your feature branch to develop.
 6. After review and approval, the PR will be merged into develop.
@@ -76,7 +76,29 @@ Examples include:
 - test: add tests for authentication module
 - chore: update dependencies
 
-Commits that don't follow this convention will be rejected.
+Commits that don't follow this convention will be rejected by the commit linter.
+
+### Handling Commit Failures
+
+If your commit is rejected due to an incorrect message format:
+
+1. The commit will not be created, and you'll see an error message explaining why it was rejected.
+2. Your changes will still be staged, so you don't lose any work.
+3. Simply run the commit command again with a corrected message that follows the convention.
+
+### Undoing Commits
+
+If you need to undo a commit:
+
+1. To undo the last commit but keep your changes staged: 
+   git reset --soft HEAD~1
+
+2. To undo the last commit and unstage your changes:
+   git reset HEAD~1
+
+3. To undo multiple commits, replace 1 with the number of commits you want to undo.
+
+Remember, if you've pushed the commit(s) to a shared branch, you should avoid rewriting history. Instead, create a new commit that reverts the changes.
 
 ## Branch Protection and Automated Tools
 
@@ -86,5 +108,7 @@ We use several tools to automate our workflow:
 - release-it for automating the release process
 - commitlint for enforcing commit message conventions
 - husky for running commitlint on commit messages
+
+To ensure these tools are set up correctly, always run "bun run prepare" after cloning the repository or pulling changes that modify the Husky or commitlint configuration.
 
 By following these conventions and workflows, we maintain a clean, automated, and easy-to-follow project history while efficiently managing crisis response efforts in Valencia.
