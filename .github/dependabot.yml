@@ -1,0 +1,36 @@
+version: 2
+updates:
+  # Configuration for Bun (using npm as a proxy)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    versioning-strategy: auto
+    allow:
+      # Allow only patch and minor updates
+      - dependency-type: "all"
+        update-type: "semver:patch"
+      - dependency-type: "all"
+        update-type: "semver:minor"
+    ignore:
+      # Ignore major updates
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "bun"
+      include: "scope"
+    # We can't use lockfile-only because Bun uses bun.lockb
+    # Instead, we'll update package.json and then use a custom script in CI
+
+  # Configuration for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      # Allow only patch and minor updates
+      - dependency-type: "all"
+        update-type: "semver:patch"
+      - dependency-type: "all"
+        update-type: "semver:minor"
