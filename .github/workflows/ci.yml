@@ -31,6 +31,16 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Update bun.lockb if package.json changed
+        if: github.actor == 'dependabot[bot]'
+        run: |
+          bun install
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add bun.lockb
+          git commit -m "Update bun.lockb" || echo "No changes to commit"
+          git push
+
       - name: Build
         run: bun run build
 
