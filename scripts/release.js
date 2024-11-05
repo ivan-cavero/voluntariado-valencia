@@ -1,7 +1,11 @@
-const fs = require('node:fs')
-const path = require('node:path')
-const { execSync } = require('node:child_process')
-const { Octokit } = require('@octokit/rest')
+import fs from 'node:fs'
+import path from 'node:path'
+import { execSync } from 'node:child_process'
+import { Octokit } from '@octokit/rest'
+import { fileURLToPath } from 'node:url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 async function createPullRequest(releaseType, version) {
 	const octokit = new Octokit({ auth: process.env.RELEASE_IT_TOKEN })
@@ -47,7 +51,7 @@ async function main() {
 				process.env.RELEASE_IT_TOKEN = match[1].trim()
 				console.log(
 					'Token set. First 4 chars:',
-					process.env.RELEASE_IT_TOKEN.substr(0, 4),
+					process.env.RELEASE_IT_TOKEN.slice(0, 4),
 				)
 			} else {
 				throw new Error('RELEASE_IT_TOKEN not found in .env file')
@@ -65,7 +69,8 @@ async function main() {
 		execSync(command, { stdio: 'inherit' })
 
 		// Get the new version number
-		const version = JSON.parse(fs.readFileSync('package.json', 'utf8')).version
+		const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+		const version = packageJson.version
 
 		// Create pull request
 		const prUrl = await createPullRequest(releaseType, version)
