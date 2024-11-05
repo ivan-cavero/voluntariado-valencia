@@ -7,26 +7,23 @@ import { fileURLToPath } from 'node:url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-async function createPullRequest(releaseType, version) {
-	const octokit = new Octokit({ auth: process.env.RELEASE_IT_TOKEN })
-	const [owner, repo] = execSync('git remote get-url origin', {
-		encoding: 'utf8',
-	})
-		.trim()
-		.match(/github\.com[:/](.+)\/(.+)\.git$/i)
-		.slice(1)
-
-	const base = releaseType === 'hotfix' ? 'main' : 'develop'
-	const head = releaseType === 'hotfix' ? `hotfix/v${version}` : 'main'
-
+async function createPullRequest(
+	octokit,
+	owner,
+	repo,
+	head,
+	base,
+	title,
+	body,
+) {
 	try {
 		const { data: pullRequest } = await octokit.pulls.create({
 			owner,
 			repo,
-			title: `${releaseType === 'hotfix' ? 'Hotfix' : 'Release'} v${version}`,
+			title,
 			head,
 			base,
-			body: `This PR merges the ${releaseType === 'hotfix' ? 'hotfix' : 'release'} v${version} into ${base}.`,
+			body,
 		})
 
 		console.log(`Pull request created: ${pullRequest.html_url}`)
@@ -63,20 +60,58 @@ async function main() {
 		const releaseType = process.argv[2]
 		const additionalArgs = process.argv.slice(3)
 
-		const command = `release-it ${releaseType} ${additionalArgs.join(' ')}`
-		console.log('Executing command:', command)
+		// Create a new release branch
+		const newVersion = execSync(
+			`npm version --no-git-tag-version ${releaseType}`,
+		)
+			.toString()
+			.trim()
+		const releaseBranch = `release/${newVersion}`
 
+		execSync(`git checkout -b ${releaseBranch}`)
+		execSync('git add .')
+		execSync(`git commit -m "chore: prepare release ${newVersion}"`)
+		execSync(`git push origin ${releaseBranch}`)
+
+		// Run release-it
+		const command = `release-it ${releaseType} ${additionalArgs.join(' ')} --no-git.requireCleanWorkingDir`
+		console.log('Executing command:', command)
 		execSync(command, { stdio: 'inherit' })
 
-		// Get the new version number
-		const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
-		const version = packageJson.version
+		// Create pull requests
+		const octokit = new Octokit({ auth: process.env.RELEASE_IT_TOKEN })
+		const [owner, repo] = execSync('git remote get-url origin', {
+			encoding: 'utf8',
+		})
+			.trim()
+			.match(/github\.com[:/](.+)\/(.+)\.git$/i)
+			.slice(1)
 
-		// Create pull request
-		const prUrl = await createPullRequest(releaseType, version)
-		if (prUrl) {
-			console.log(`Pull request created: ${prUrl}`)
-		}
+		// PR from release branch to main
+		const mainPrUrl = await createPullRequest(
+			octokit,
+			owner,
+			repo,
+			releaseBranch,
+			'main',
+			`Release ${newVersion}`,
+			`This PR merges the release ${newVersion} into main.`,
+		)
+
+		// PR from release branch to develop
+		const developPrUrl = await createPullRequest(
+			octokit,
+			owner,
+			repo,
+			releaseBranch,
+			'develop',
+			`Merge release ${newVersion} into develop`,
+			`This PR merges the release ${newVersion} back into develop.`,
+		)
+
+		console.log('Release process completed.')
+		console.log(`Main PR: ${mainPrUrl}`)
+		console.log(`Develop PR: ${developPrUrl}`)
 	} catch (error) {
 		console.error('Error:', error.message)
 		process.exit(1)

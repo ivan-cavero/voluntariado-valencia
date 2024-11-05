@@ -1,12 +1,9 @@
 {
 	"git": {
+		"requireCleanWorkingDir": false,
 		"commitMessage": "chore: release v${version}",
 		"tagName": "v${version}",
-		"requireCleanWorkingDir": true,
-		"requireBranch": ["main", "develop", "hotfix/*"],
-		"requireUpstream": true,
-		"push": true,
-		"pushRepo": "origin"
+		"push": false
 	},
 	"github": {
 		"release": true,
@@ -23,7 +20,6 @@
 		}
 	},
 	"hooks": {
-		"before:init": ["bun run build"],
-		"after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+		"before:init": ["bun run build"]
 	}
 }
