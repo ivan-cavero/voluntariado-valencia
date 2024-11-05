@@ -35,31 +35,70 @@ We follow an enhanced Git Flow model with automated tools for releases and enfor
 
 To create a new feature:
 
-1. Ensure you're on the develop branch and it's up to date by running "git checkout develop" and "git pull origin develop".
-2. Create a new feature branch with "git checkout -b feature/name-of-feature".
-3. Develop your feature, making commits that follow the conventional commit format (see Commit Conventions below).
-4. Push your branch to GitHub with "git push origin feature/name-of-feature".
+1. Ensure you're on the develop branch and it's up to date:
+   git checkout develop
+   git pull origin develop
+
+2. Create a new feature branch:
+   git checkout -b feature/name-of-feature
+
+3. Develop your feature, making commits that follow the conventional commit format.
+
+4. Push your branch to GitHub:
+   git push origin feature/name-of-feature
+
 5. Create a Pull Request on GitHub from your feature branch to develop.
+
 6. After review and approval, the PR will be merged into develop.
 
 ### Preparing a Release
 
-To prepare a release:
+Releases are created from the develop branch:
 
-1. Ensure you're on the develop branch and it's up to date.
-2. Run "bun run release -- minor" for a minor version bump or "bun run release -- major" for a major version bump.
+1. Ensure you're on the develop branch and it's up to date:
+   git checkout develop
+   git pull origin develop
+
+2. Run the release command:
+   bun run release -- minor  # For a minor version bump
+   # or
+   bun run release -- major  # For a major version bump
+
 3. Follow the prompts from release-it. It will handle version bumping, changelog updates, commit creation, tagging, pushing changes, and creating a GitHub release.
-4. After the release, merge the changes back to develop by checking out develop, merging main, and pushing to GitHub.
+
+4. After the release, merge the changes to main:
+   git checkout main
+   git merge develop
+   git push origin main
+
+5. Switch back to develop and merge the release changes:
+   git checkout develop
+   git merge main
+   git push origin develop
 
 ### Hotfixes
 
-For urgent fixes:
+Hotfixes are created from the main branch for urgent fixes:
 
-1. Create a hotfix branch from main with "git checkout main", "git pull origin main", and "git checkout -b hotfix/description-of-problem".
+1. Create a hotfix branch from main:
+   git checkout main
+   git pull origin main
+   git checkout -b hotfix/description-of-problem
+
 2. Make the necessary fixes, committing with the conventional commit format.
-3. Run "bun run release -- patch" to start the hotfix release process.
+
+3. Run the hotfix release process:
+   bun run release -- patch
+
 4. Follow the prompts from release-it.
-5. After the hotfix is released, merge the changes back to develop.
+
+5. After the hotfix is released, merge the changes back to develop:
+   git checkout develop
+   git merge hotfix/description-of-problem
+   git push origin develop
+
+6. Delete the hotfix branch:
+   git branch -d hotfix/description-of-problem
 
 ## Commit Conventions
 
